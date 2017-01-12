@@ -1,4 +1,5 @@
 import com.lxs.sml.filter.LoggingFilter;
+import com.lxs.sml.filter.LoggingFormat;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.context.annotation.Bean;
@@ -36,7 +37,7 @@ public class Test {
 
     @Bean
     public Filter filter() {
-        return new LoggingFilter();
+        return new com.lxs.sml.filter.LoggingFilter();
     }
 
     public static void main(String[] args) {
