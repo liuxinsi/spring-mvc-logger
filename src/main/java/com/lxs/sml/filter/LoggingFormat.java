@@ -10,6 +10,7 @@ import java.util.Map;
 public class LoggingFormat {
     private static String DEFAULT_REQ_LAYOUT = "Request：[%r][%flag] [%r]ID：[%id] [%r]URL：[%url] [%r]Method：[%method] [%r]Headers：[%header] [%r]Payload：[%payload] [%r][%flag]";
     private static String DEFAULT_RESP_LAYOUT = "Response：[%r][%flag] [%r]ID：[%id] [%r]RespCode：[%status] [%r]Headers：[%header] [%r]Payload：[%payload] [%r][%flag]";
+    private static CopyOnWriteArraySet<String> ignoreUrls = new CopyOnWriteArraySet<>();
     private String flag = "---------------------------------------------------------------";
     private String crlf = System.getProperty("line.separator");
     private String id;
@@ -69,6 +70,13 @@ public class LoggingFormat {
 
     public static void setDefaultRespLayout(String defaultRespLayout) {
         DEFAULT_RESP_LAYOUT = defaultRespLayout;
+    }
+    public static void addIgnoreUrl(String url) {
+        ignoreUrls.add(url);
+    }
+
+    public static CopyOnWriteArraySet<String> getIgnoreUrls() {
+        return ignoreUrls;
     }
 
     public LoggingFormat setFlag(String flag) {
