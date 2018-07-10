@@ -127,6 +127,6 @@ public class LoggingFilter extends OncePerRequestFilter {
         }
         
         String path = request.getServletPath();
-        return LoggingFormat.getIgnoreUrls().stream().anyMatch(url -> url.equals(path) || url.matches(path));
+        return LoggingFormat.getIgnoreUrls().stream().anyMatch(url -> url.equals(path) || path.matches(url));
     }
 }
