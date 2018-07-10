@@ -120,4 +120,13 @@ public class LoggingFilter extends OncePerRequestFilter {
         }
         logger.debug(lf.respFormat());
     }
+     @Override
+    protected boolean shouldNotFilter(HttpServletRequest request) throws ServletException {
+        if (LoggingFormat.getIgnoreUrls().isEmpty()) {
+            return super.shouldNotFilter(request);
+        }
+        
+        String path = request.getServletPath();
+        return LoggingFormat.getIgnoreUrls().stream().anyMatch(url -> url.equals(path) || url.matches(path));
+    }
 }
