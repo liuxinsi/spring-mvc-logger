@@ -3,6 +3,7 @@
 
 - **Logging**: Log requests and responses.
 - **Custom Layout**: Your own custom Layout
+- **Web-Flux** : 支持Netty的Reactive接口(注：没在生产环境下大规模的验证，慎用，2018-09-13在测。)。
 
 ## Sample
    GET Request
@@ -61,6 +62,21 @@ Payload：{"code":"123456","name":"test"}
     @Bean
     public Filter filter() {
         return new com.lxs.sml.filter.LoggingFilter();
+    }
+
+    public static void main(String[] args) {
+        SpringApplication.run(Test.class, args);
+    }
+    
+```
+
+Reactive
+```
+
+    @Bean
+    @Order(0)
+    public Filter filter() {
+        return new com.lxs.sml.filter.reactive.LoggingFilter();
     }
 
     public static void main(String[] args) {
