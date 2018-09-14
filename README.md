@@ -1,3 +1,5 @@
+[![](https://jitpack.io/v/liuxinsi/spring-mvc-logger.svg)](https://jitpack.io/#liuxinsi/spring-mvc-logger)
+
 # spring-mvc-logger
 ## Features
 
