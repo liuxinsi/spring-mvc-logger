@@ -6,6 +6,8 @@ import org.springframework.web.server.WebFilterChain;
 import reactor.core.publisher.Mono;
 
 /**
+ * 支持<b>Reactive Stack</b>下<b>Netty</b>容器的日志记录。
+ *
  * @author liuxinsi
  * @date 2018/9/12 17:01
  */

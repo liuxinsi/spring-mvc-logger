@@ -57,6 +57,25 @@ Payload：{"code":"123456","name":"test"}
 ```
 
 ## How to use
+### Maven Import
+```
+ <repositories>
+        <repository>
+            <id>jitpack.io</id>
+            <url>https://jitpack.io</url>
+        </repository>
+ </repositories>
+
+
+ <dependencies>
+    <dependency>
+         <groupId>com.github.liuxinsi</groupId>
+         <artifactId>spring-mvc-logger</artifactId>
+         <version>1.2</version>
+    </dependency>
+ </dependencies>
+```
+
 ```
 
     @Bean

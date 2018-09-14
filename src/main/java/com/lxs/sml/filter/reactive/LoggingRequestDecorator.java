@@ -1,6 +1,7 @@
 package com.lxs.sml.filter.reactive;
 
 import com.lxs.sml.filter.LoggingFormat;
+import com.lxs.sml.filter.Utils;
 import io.netty.buffer.UnpooledByteBufAllocator;
 import org.apache.commons.io.IOUtils;
 import org.slf4j.Logger;
@@ -47,9 +48,7 @@ public class LoggingRequestDecorator extends ServerHttpRequestDecorator {
         } else {
             return Flux.just(getBodyMore());
         }
-
     }
-
 
     private DataBuffer getBodyMore() {
         NettyDataBufferFactory nettyDataBufferFactory = new NettyDataBufferFactory(new UnpooledByteBufAllocator(false));
@@ -70,7 +69,7 @@ public class LoggingRequestDecorator extends ServerHttpRequestDecorator {
     }
 
     private void loggin(ServerHttpRequest request) {
-        Map<String, String> map = new HashMap<>();
+        Map<String, String> map = new HashMap<>(16);
         request.getHeaders().forEach((s, values) -> map.put(s, values.isEmpty() ? "" : values.get(0)));
 
         LoggingFormat lf = new LoggingFormat();
@@ -82,19 +81,11 @@ public class LoggingRequestDecorator extends ServerHttpRequestDecorator {
 
         boolean isBinaryContent = true;
         if (request.getHeaders().containsKey(HttpHeaders.CONTENT_TYPE)) {
-            isBinaryContent = request.getHeaders().getValuesAsList(HttpHeaders.CONTENT_TYPE).stream().anyMatch(this::isBinaryContent);
+            isBinaryContent = request.getHeaders().getValuesAsList(HttpHeaders.CONTENT_TYPE).stream().anyMatch(Utils::isBinaryContent);
         }
         if (!isBinaryContent) {
             lf.setPayload(new String(bytes));
         }
         logger.debug(lf.reqFormat());
-    }
-
-    private boolean isBinaryContent(String contentType) {
-        return contentType.contains("image")
-                || contentType.contains("video")
-                || contentType.contains("audio")
-                || contentType.contains("multipart")
-                || contentType.contains("octet-stream");
     }
 }

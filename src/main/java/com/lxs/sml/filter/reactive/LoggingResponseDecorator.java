@@ -1,6 +1,7 @@
 package com.lxs.sml.filter.reactive;
 
 import com.lxs.sml.filter.LoggingFormat;
+import com.lxs.sml.filter.Utils;
 import org.apache.commons.io.IOUtils;
 import org.reactivestreams.Publisher;
 import org.slf4j.Logger;
@@ -77,7 +78,7 @@ public class LoggingResponseDecorator extends ServerHttpResponseDecorator {
     }
 
     private void logResponse(ServerHttpResponse response) {
-        Map<String, String> map = new HashMap<>();
+        Map<String, String> map = new HashMap<>(16);
         response.getHeaders().forEach((s, values) -> map.put(s, values.isEmpty() ? "" : values.get(0)));
 
         LoggingFormat lf = new LoggingFormat();
@@ -87,20 +88,15 @@ public class LoggingResponseDecorator extends ServerHttpResponseDecorator {
 
         boolean isBinaryContent = true;
         if (response.getHeaders().containsKey(HttpHeaders.CONTENT_TYPE)) {
-            isBinaryContent = response.getHeaders().getValuesAsList(HttpHeaders.CONTENT_TYPE).stream().anyMatch(this::isBinaryContent);
+            isBinaryContent = response.getHeaders().getValuesAsList(HttpHeaders.CONTENT_TYPE).stream().anyMatch(Utils::isBinaryContent);
         }
         if (!isBinaryContent) {
             lf.setPayload(new String(baos.toByteArray()));
             IOUtils.closeQuietly(baos);
         }
-        logger.debug(lf.respFormat());
-    }
 
-    private boolean isBinaryContent(String contentType) {
-        return contentType.contains("image")
-                || contentType.contains("video")
-                || contentType.contains("audio")
-                || contentType.contains("multipart")
-                || contentType.contains("octet-stream");
+        if (logger.isDebugEnabled()) {
+            logger.debug(lf.respFormat());
+        }
     }
 }

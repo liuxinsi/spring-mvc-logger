@@ -18,6 +18,8 @@ import org.slf4j.LoggerFactory;
 import org.springframework.web.filter.OncePerRequestFilter;
 
 /**
+ * 支持<b>Servlet Stack</b>下<b>Servlet</b>容器的日志记录。
+ *
  * @author liuxinsi
  */
 public class LoggingFilter extends OncePerRequestFilter {
@@ -47,7 +49,7 @@ public class LoggingFilter extends OncePerRequestFilter {
         request.setAttribute(REQ_ATTR, requestId);
 
         Enumeration<String> heads = request.getHeaderNames();
-        Map<String, String> m = new HashMap<>();
+        Map<String, String> m = new HashMap<>(16);
         while (heads.hasMoreElements()) {
             String h = heads.nextElement();
             m.put(h, request.getHeader(h));
@@ -96,7 +98,7 @@ public class LoggingFilter extends OncePerRequestFilter {
     }
 
     private void logResponse(HttpServletRequest request, HttpServletResponse response) {
-        Map<String, String> m = new HashMap<>();
+        Map<String, String> m = new HashMap<>(16);
         response.getHeaderNames().forEach(s -> m.put(s, response.getHeader(s)));
         LoggingFormat lf = new LoggingFormat();
         lf.setId(request.getAttribute(REQ_ATTR).toString())
@@ -120,12 +122,13 @@ public class LoggingFilter extends OncePerRequestFilter {
         }
         logger.debug(lf.respFormat());
     }
-     @Override
+
+    @Override
     protected boolean shouldNotFilter(HttpServletRequest request) throws ServletException {
         if (LoggingFormat.getIgnoreUrls().isEmpty()) {
             return super.shouldNotFilter(request);
         }
-        
+
         String path = request.getServletPath();
         return LoggingFormat.getIgnoreUrls().stream().anyMatch(url -> url.equals(path) || path.matches(url));
     }

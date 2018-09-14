@@ -6,12 +6,24 @@ import java.util.Map;
 import java.util.concurrent.CopyOnWriteArraySet;
 
 /**
+ * 格式化日志。
+ *
  * @author liuxinsi
  */
 public class LoggingFormat {
+    /**
+     * 默认格式
+     */
     private static String DEFAULT_REQ_LAYOUT = "Request：[%r][%flag] [%r]ID：[%id] [%r]URL：[%url] [%r]Method：[%method] [%r]Headers：[%header] [%r]Payload：[%payload] [%r][%flag]";
     private static String DEFAULT_RESP_LAYOUT = "Response：[%r][%flag] [%r]ID：[%id] [%r]RespCode：[%status] [%r]Headers：[%header] [%r]Payload：[%payload] [%r][%flag]";
+    /**
+     * 过滤的地址
+     */
     private static CopyOnWriteArraySet<String> ignoreUrls = new CopyOnWriteArraySet<>();
+
+    /**
+     * details
+     */
     private String flag = "---------------------------------------------------------------";
     private String crlf = System.getProperty("line.separator");
     private String id;
@@ -22,7 +34,7 @@ public class LoggingFormat {
     private String payload;
 
     private Map<String, String> build() {
-        Map<String, String> m = new HashMap<>();
+        Map<String, String> m = new HashMap<>(16);
         if (flag != null) {
             m.put("flag", flag);
         }
@@ -72,6 +84,14 @@ public class LoggingFormat {
     public static void setDefaultRespLayout(String defaultRespLayout) {
         DEFAULT_RESP_LAYOUT = defaultRespLayout;
     }
+
+    /**
+     * 添加过滤的url。<br/>
+     * 当请求路径匹配添加的url将不会进行记录。<br/>
+     * 支持正则。
+     *
+     * @param url
+     */
     public static void addIgnoreUrl(String url) {
         ignoreUrls.add(url);
     }
