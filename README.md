@@ -76,6 +76,7 @@ Payload：{"code":"123456","name":"test"}
  </dependencies>
 ```
 
+### Code
 ```
 
     @Bean
