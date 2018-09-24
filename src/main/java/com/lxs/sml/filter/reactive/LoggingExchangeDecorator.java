@@ -35,6 +35,9 @@ public class LoggingExchangeDecorator extends ServerWebExchangeDecorator {
             id.increment();
             this.requestDecorator = new LoggingRequestDecorator(delegate.getRequest(), id.longValue());
             this.responseDecorator = new LoggingResponseDecorator(delegate.getResponse(), id.longValue());
+        } else {
+            this.requestDecorator = new ServerHttpRequestDecorator(delegate.getRequest());
+            this.responseDecorator = new ServerHttpResponseDecorator(delegate.getResponse());
         }
     }
 
