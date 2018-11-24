@@ -29,19 +29,20 @@ public class LoggingFilter extends OncePerRequestFilter {
 
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
-//         if (logger.isDebugEnabled()) {
+        boolean debugEnabled = LoggingFormat.getIsDebugEnabled() != null ? LoggingFormat.getIsDebugEnabled() : logger.isDebugEnabled();
+        if (debugEnabled) {
             byte[] payload = logRequest(request);
             if (payload != null) {
                 request = new HttpServletRequestAdapter(request, payload);
             }
             response = new HttpServletResponseAdapter(response);
-//         }
+        }
 
         filterChain.doFilter(request, response);
 
-//         if (logger.isDebugEnabled()) {
+        if (debugEnabled) {
             logResponse(request, response);
-//         }
+        }
     }
 
     private byte[] logRequest(HttpServletRequest request) {

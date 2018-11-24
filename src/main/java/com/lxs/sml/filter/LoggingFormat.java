@@ -20,6 +20,7 @@ public class LoggingFormat {
      * 过滤的地址
      */
     private static CopyOnWriteArraySet<String> ignoreUrls = new CopyOnWriteArraySet<>();
+    private static Boolean isDebugEnabled;
 
     /**
      * details
@@ -138,5 +139,13 @@ public class LoggingFormat {
     public LoggingFormat setPayload(String payload) {
         this.payload = payload;
         return this;
+    }
+
+    public static void setIsDebugEnabled(Boolean isDebugEnabled) {
+        LoggingFormat.isDebugEnabled = isDebugEnabled;
+    }
+
+    public static Boolean getIsDebugEnabled() {
+        return isDebugEnabled;
     }
 }
