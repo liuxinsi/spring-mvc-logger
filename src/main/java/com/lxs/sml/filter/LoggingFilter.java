@@ -23,25 +23,25 @@ import org.springframework.web.filter.OncePerRequestFilter;
  * @author liuxinsi
  */
 public class LoggingFilter extends OncePerRequestFilter {
-    private Logger logger = LoggerFactory.getLogger(LoggingFilter.class);
+    private static final Logger logger = LoggerFactory.getLogger(LoggingFilter.class);
     private static final String REQ_ATTR = "reqId";
     private AtomicLong id = new AtomicLong(1);
 
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
-        if (logger.isDebugEnabled()) {
+//         if (logger.isDebugEnabled()) {
             byte[] payload = logRequest(request);
             if (payload != null) {
                 request = new HttpServletRequestAdapter(request, payload);
             }
             response = new HttpServletResponseAdapter(response);
-        }
+//         }
 
         filterChain.doFilter(request, response);
 
-        if (logger.isDebugEnabled()) {
+//         if (logger.isDebugEnabled()) {
             logResponse(request, response);
-        }
+//         }
     }
 
     private byte[] logRequest(HttpServletRequest request) {
